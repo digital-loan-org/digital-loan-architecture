@@ -1,0 +1,26 @@
+flowchart TD
+    Start([Loan Application Started])
+
+    Profile[Profile & OTP Completed]
+    KYC[KYC Verified]
+    Income[Income & Employment Verified]
+    Bureau[Bureau Check Passed]
+    Eligibility[Eligibility Calculated]
+    Offer[Loan Offer Generated]
+    Accept[Offer Accepted by Customer]
+    Sanction[Loan Sanctioned & eSign Completed]
+    NACH[NACH Mandate Setup]
+    Disburse[Loan Disbursed]
+    End([Loan Active])
+
+    Start --> Profile
+    Profile --> KYC
+    KYC --> Income
+    Income --> Bureau
+    Bureau --> Eligibility
+    Eligibility --> Offer
+    Offer --> Accept
+    Accept --> Sanction
+    Sanction --> NACH
+    NACH --> Disburse
+    Disburse --> End

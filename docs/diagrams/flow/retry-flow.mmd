@@ -1,0 +1,29 @@
+flowchart TD
+    Start([Stage Execution Started])
+
+    CallVendor[Call External Vendor]
+    Success[Stage Successful]
+    Fail[Vendor Failure Detected]
+
+    ShortRetry["Service-Level Retry<br/>(short retry with backoff)"]
+    LongRetry["Workflow-Level Retry<br/>(wait & retry)"]
+    Exhausted[Retry Limit Exhausted]
+
+    Reject([Loan Rejected])
+    End([Stage Completed / Journey Continues])
+
+    Start --> CallVendor
+
+    CallVendor -->|Success| Success
+    Success --> End
+
+    CallVendor -->|Failure| Fail
+
+    Fail --> ShortRetry
+    ShortRetry -->|Success| Success
+    ShortRetry -->|Failure| LongRetry
+
+    LongRetry -->|Retry Available| CallVendor
+    LongRetry -->|No Retry Left| Exhausted
+
+    Exhausted --> Reject
