@@ -1,0 +1,56 @@
+C4Container
+    title Digital Loan Origination Platform - Container Diagram
+
+    Person(customer, "Customer", "Salaried loan applicant")
+    Person(ops, "Ops / Risk Team", "Operations and risk users")
+
+    System_Boundary(loan_boundary, "Digital Loan Origination Platform") {
+
+        Container(api_gateway, "API Gateway", "Spring Cloud Gateway", "Single entry point for client and ops requests")
+        Container(auth_service, "Auth Service", "Keycloak", "Authentication, authorization, role management")
+        Container(customer_service, "Customer Service", "Spring Boot", "Customer profile, identity linkage, de-duplication")
+        Container(loan_service, "Loan Application Service", "Spring Boot", "Loan lifecycle, state machine, orchestration trigger")
+        Container(workflow_service, "Workflow Service", "Camunda", "Saga orchestration, retries, timers, compensation")
+        Container(kyc_service, "KYC Service", "Spring Boot", "PAN, Aadhaar, face match verification")
+        Container(income_service, "Income Service", "Spring Boot", "Salary and employment verification")
+        Container(bureau_service, "Bureau Service", "Spring Boot", "Credit bureau fetch and parsing")
+        Container(eligibility_service, "Eligibility Service", "Spring Boot", "FOIR / IIR evaluation and policy checks")
+        Container(offer_service, "Offer Service", "Spring Boot", "Eligible loan offer generation")
+        Container(sanction_service, "Sanction Service", "Spring Boot", "Sanction letter generation and eSign initiation")
+        Container(payment_service, "Payment Service", "Spring Boot", "Bank verification, NACH setup, disbursement trigger")
+        Container(config_service, "Config Service", "Spring Boot", "Platform configuration, vendor toggles, retry configs")
+        Container(audit_service, "Audit Service", "Spring Boot", "Immutable audit trail")
+
+        ContainerDb(postgres_db, "Databases", "PostgreSQL", "Service-owned relational databases")
+        Container(event_bus, "Event Bus", "Kafka", "Asynchronous domain events")
+    }
+
+    System_Ext(kyc_vendor, "KYC & Identity Vendor", "External identity verification")
+    System_Ext(bank_vendor, "Bank Aggregator", "Bank statements and salary data")
+    System_Ext(bureau_vendor, "Credit Bureau", "Credit reports and scores")
+    System_Ext(esign_vendor, "eSign Provider", "Digital document signing")
+    System_Ext(nach_vendor, "NACH Provider", "EMI mandate setup")
+    System_Ext(notification_system, "Notification System", "SMS / Email / Push")
+
+    Rel(customer, api_gateway, "Uses")
+    Rel(ops, api_gateway, "Uses")
+
+    Rel(api_gateway, auth_service, "Authenticates via")
+    Rel(api_gateway, customer_service, "Customer APIs")
+    Rel(api_gateway, loan_service, "Loan APIs")
+
+    Rel(loan_service, workflow_service, "Starts / updates workflow")
+    Rel(workflow_service, event_bus, "Publishes / consumes events")
+
+    Rel(loan_service, eligibility_service, "Requests eligibility")
+    Rel(eligibility_service, config_service, "Reads rules")
+
+    Rel(kyc_service, kyc_vendor, "Verifies identity")
+    Rel(income_service, bank_vendor, "Fetches bank data")
+    Rel(bureau_service, bureau_vendor, "Fetches credit data")
+    Rel(sanction_service, esign_vendor, "Initiates eSign")
+    Rel(payment_service, nach_vendor, "Sets up mandate")
+
+    Rel(event_bus, audit_service, "Audit events")
+    Rel(loan_service, postgres_db, "Persists loan state")
+    Rel(customer_service, postgres_db, "Persists customer data")

@@ -1,0 +1,15 @@
+sequenceDiagram
+    participant WF as Workflow Service
+    participant Income as Income Service
+    participant Bank as Bank Aggregator
+    participant DB as Income DB
+    participant Kafka as Event Bus
+
+    WF->>Income: Verify income
+    Income->>Bank: Fetch bank statements
+    Bank-->>Income: Salary data
+    Income->>DB: Persist income verification result
+    DB-->>Income: Commit success
+    Income->>Kafka: Publish INCOME_VERIFIED
+    Kafka-->>WF: Event consumed
+    WF-->>WF: Move to next stage

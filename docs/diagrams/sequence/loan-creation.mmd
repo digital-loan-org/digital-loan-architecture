@@ -1,0 +1,15 @@
+sequenceDiagram
+    participant Customer
+    participant API as API Gateway
+    participant Loan as Loan Application Service
+    participant DB as Loan DB
+    participant WF as Workflow Service (Camunda)
+
+    Customer->>API: Submit loan application
+    API->>Loan: Create loan application
+    Loan->>DB: Persist loan (CREATED)
+    DB-->>Loan: Commit success
+    Loan->>WF: Start loan workflow
+    WF-->>Loan: Workflow instance started
+    Loan-->>API: Loan application ID returned
+    API-->>Customer: Application created

@@ -1,0 +1,18 @@
+sequenceDiagram
+    participant WF as Workflow Service
+    participant Pay as Payment Service
+    participant NACH as NACH Provider
+    participant Bank as Bank System (Mocked)
+    participant DB as Payment DB
+    participant Kafka as Event Bus
+
+    WF->>Pay: Initiate disbursement
+    Pay->>NACH: Verify NACH mandate
+    NACH-->>Pay: Mandate confirmed
+    Pay->>Bank: Transfer funds (mocked)
+    Bank-->>Pay: Transfer success
+    Pay->>DB: Persist disbursement status
+    DB-->>Pay: Commit success
+    Pay->>Kafka: Publish LOAN_DISBURSED
+    Kafka-->>WF: Event consumed
+    WF-->>WF: Mark loan DISBURSED

@@ -1,0 +1,35 @@
+flowchart TD
+    Start([Loan Application Started])
+
+    Profile[Profile & OTP Completed]
+    KYC[KYC Verification]
+    Income[Income & Employment Check]
+    Bureau[Bureau Check]
+    Eligibility[Eligibility Evaluation]
+
+    RejectKYC([Loan Rejected])
+    RejectIncome([Loan Rejected])
+    RejectBureau([Loan Rejected])
+    RejectEligibility([Loan Rejected])
+
+    End([Loan Application Closed])
+
+    Start --> Profile
+    Profile --> KYC
+
+    KYC -->|Failed| RejectKYC
+    KYC -->|Passed| Income
+
+    Income -->|Failed| RejectIncome
+    Income -->|Passed| Bureau
+
+    Bureau -->|Failed| RejectBureau
+    Bureau -->|Passed| Eligibility
+
+    Eligibility -->|Failed| RejectEligibility
+    Eligibility -->|Passed| End
+
+    RejectKYC --> End
+    RejectIncome --> End
+    RejectBureau --> End
+    RejectEligibility --> End
