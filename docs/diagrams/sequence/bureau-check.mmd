@@ -1,0 +1,15 @@
+sequenceDiagram
+    participant WF as Workflow Service
+    participant Bureau as Bureau Service
+    participant Vendor as Credit Bureau
+    participant DB as Bureau DB
+    participant Kafka as Event Bus
+
+    WF->>Bureau: Perform bureau check
+    Bureau->>Vendor: Fetch credit report
+    Vendor-->>Bureau: Credit score & tradelines
+    Bureau->>DB: Persist bureau result
+    DB-->>Bureau: Commit success
+    Bureau->>Kafka: Publish BUREAU_CHECKED
+    Kafka-->>WF: Event consumed
+    WF-->>WF: Proceed to eligibility
