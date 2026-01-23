@@ -38,8 +38,7 @@ This is the **source of truth** for *how the system is supposed to work* before 
     - Bank verification & NACH setup
     - Loan disbursement (**mocked**)
 - Customer-facing APIs
-- Admin / Ops APIs (approve / reject only)
-- Authentication & authorization using **Keycloak**
+- Fully automated system-driven decisions
 - **Event-driven orchestration** using **Camunda**
 - **Immutable audit trail** for every decision and action
 
@@ -98,7 +97,7 @@ The content prioritizes:
 ### 4.3 Saga-Based Orchestration
 - Long-running workflows are orchestrated using **Camunda**
 - Explicit retries, waits, and compensations
-- Workflow visibility for Ops
+- Automated decision enforcement
 - No custom orchestration code
 
 ---
@@ -114,7 +113,7 @@ The content prioritizes:
 ### 4.5 Full Audit & Explainability
 - Every state transition is auditable
 - Every vendor response is captured (masked)
-- Every Ops action is recorded
+- Every system action is recorded
 - Rejection reasons are explainable and immutable
 
 ---
@@ -207,7 +206,7 @@ All diagrams are maintained as **Mermaid source** under `docs/diagrams/`.
 - Long retries handled by workflow (Camunda)
 - No rollback of successful stages
 - Loan rejected only after retries exhaust or business rules fail
-- Ops intervention limited to **Approve / Reject only**
+- System-driven decisions, fully automated
 
 Failures are expected and explicitly modeled.
 
@@ -218,7 +217,7 @@ Failures are expected and explicitly modeled.
 - Aadhaar data is **never stored**
 - All PII is encrypted at rest and in transit
 - Field-level encryption for sensitive data
-- Strict RBAC using Keycloak
+- Secure authentication for API access
 - Engineers have **no access** to production PII
 - Immutable, append-only audit logs
 - Long-term archival for compliance

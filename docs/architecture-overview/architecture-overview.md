@@ -56,9 +56,9 @@ This enables:
 
 **Why Hybrid?**
 - State is always queryable from application service
-- Workflow visibility for Ops via Camunda UI
 - Explicit compensation paths
 - Safe replay of long-running journeys
+- Automated decision enforcement
 
 Camunda drives *when* things happen.  
 Services decide *what* happens.

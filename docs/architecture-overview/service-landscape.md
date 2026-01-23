@@ -17,25 +17,14 @@ The goal is to:
 
 | Service | Primary Responsibility | Database | SDKs Used |
 |------|-----------------------|----------|-----------|
-| customer-service | Customer profile & identity | PostgreSQL | identity-sdk |
-| loan-application-service | Loan lifecycle & state | MongoDB | workflow-sdk |
-| income-service | Salary & employment checks | PostgreSQL | bank-agg-sdk, epfo-sdk |
-| eligibility-service | FOIR/IIR & policy rules | PostgreSQL | config-sdk |
+| customer-service | Customer profile & identity | PostgreSQL | kyc-sdk |
+| application-service | Loan lifecycle & state | PostgreSQL | None |
+| income-service | Salary & employment checks | PostgreSQL | bank-sdk, epfo-sdk |
+| eligibility-service | FOIR/IIR & policy rules | PostgreSQL | None |
 | sanction-service | Sanction & eSign | PostgreSQL | esign-sdk |
 | config-service | Dynamic rules & thresholds | PostgreSQL | — |
 | audit-service | Immutable audit trail | Append-only DB | — |
-| workflow-service | Loan journey orchestration | Camunda DB | workflow-sdk |
-
----
-
-### Platform SDKs (Internal – Non-Vendor)
-
-| SDK | Purpose | Used By |
-|----|--------|--------|
-| platform-common | Exceptions, headers, idempotency | All services |
-| workflow-sdk | Camunda client abstraction | loan-application-service |
-| config-sdk | Rule & threshold access | eligibility, offer |
-| audit-sdk | Audit event publishing | All services |
+| workflow-service | Loan journey orchestration | Camunda DB | None |
 
 ---
 
@@ -43,8 +32,8 @@ The goal is to:
 
 | SDK | Abstracts | Typical Vendors |
 |----|----------|---------------|
-| identity-sdk | PAN, Aadhaar, face match | ULI, Karza |
-| bank-agg-sdk | Bank statements & salary | ULI, Ignosis |
+| kyc-sdk | PAN, Aadhaar, face match | ULI, Karza |
+| bank-sdk | Bank statements & salary | ULI, Ignosis |
 | epfo-sdk | EPFO employment verification | EPFO / ULI |
 | bureau-sdk | Credit bureau data | CRIF Highmark |
 | esign-sdk | Digital document signing | ULI, SignDesk |
@@ -57,24 +46,7 @@ The goal is to:
 
 ---
 
-### 🔐 auth-service
-**Responsibility**
-- User authentication
-- Token issuance
-- Role-based access control
-
-**Owns**
-- Users
-- Roles
-- Access policies
-
-**Notes**
-- Backed by Keycloak
-- No business data allowed
-
----
-
-### 👤 customer-service
+###  customer-service
 **Responsibility**
 - Customer profile management
 - Identity association
@@ -86,7 +58,7 @@ The goal is to:
 - KYC linkage
 
 **Uses SDK**
-- `identity-sdk`
+- `kyc-sdk`
 
 **Does NOT Own**
 - Loan data
@@ -94,7 +66,7 @@ The goal is to:
 
 ---
 
-### 📝 loan-application-service
+### 📝 application-service
 **Responsibility**
 - Loan application lifecycle
 - State machine ownership
@@ -105,7 +77,7 @@ The goal is to:
 - Current loan state
 
 **Uses SDK**
-- `workflow-sdk`
+- None
 
 **Key Rule**
 > This service owns *state*, not *flow logic*.
@@ -119,7 +91,7 @@ The goal is to:
 - Face match & liveliness
 
 **Uses SDK**
-- `identity-sdk`
+- `kyc-sdk`
 
 **Failure Handling**
 - Retry with backoff
@@ -134,7 +106,7 @@ The goal is to:
 - Bank statement analysis
 
 **Uses SDKs**
-- `bank-agg-sdk`
+- `bank-sdk`
 - `epfo-sdk`
 
 ---
@@ -159,7 +131,7 @@ The goal is to:
 - Cooling period checks
 
 **Uses SDK**
-- `config-sdk`
+- None
 
 **Data Stored**
 - Eligibility decisions
@@ -174,7 +146,7 @@ The goal is to:
 - Apply product caps & tenure options
 
 **Uses SDK**
-- `config-sdk`
+- None
 
 ---
 
@@ -188,13 +160,14 @@ The goal is to:
 
 ---
 
-### 💳 payment-service
+### 💳 disbursement-service
 **Responsibility**
-- Penny drop verification
+- Bank verification
 - NACH setup
 - Disbursement trigger (mocked)
 
 **Uses SDKs**
+- `bank-sdk`
 - `nach-sdk`
 - `payment-sdk`
 
@@ -226,10 +199,10 @@ The goal is to:
 **Responsibility**
 - Orchestrate loan journey
 - Handle retries & compensation
-- Provide Ops visibility
+- Enforce automated decision logic
 
 **Uses**
-- `workflow-sdk`
+- None (orchestration engine only)
 
 **Does NOT Own**
 - Business rules

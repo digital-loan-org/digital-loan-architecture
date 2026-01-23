@@ -8,7 +8,7 @@ The goal is to:
 - Prevent business logic leakage across services
 - Avoid duplicate data ownership
 - Ensure auditability and explainability
-- Enable safe ops / risk overrides
+- Enable clear service boundaries
 - Support long-term scalability
 
 ---
@@ -34,7 +34,7 @@ The goal is to:
 | credit-service | Credit interpretation | ✅ Yes | PostgreSQL | bureau-sdk |
 | eligibility-service | FOIR / IIR computation | ✅ Yes | Optional (Snapshot) | None |
 | sanction-service | Legal sanction | ✅ Yes | PostgreSQL + Object Store | esign-sdk |
-| disbursement-service | Ops & payout | ✅ Yes | PostgreSQL | bank-sdk, nach-sdk, payment-sdk |
+| disbursement-service | Payment & payout | ✅ Yes | PostgreSQL | bank-sdk, nach-sdk, payment-sdk |
 | collection-service | Repayment lifecycle | ✅ Yes | PostgreSQL | payment-sdk |
 | workflow-service | Orchestration | ❌ No | Engine DB only | None |
 | config-service | Rule storage | ❌ No | PostgreSQL / Redis | None |
@@ -90,7 +90,7 @@ These services **own business meaning** and persist domain data.
 **Rules**
 - ONLY service allowed to change application state
 - Other services may only READ state
-- Ops / Risk actions go through secured APIs
+- All state changes are validated and audited
 
 ---
 
@@ -186,10 +186,10 @@ These services **own business meaning** and persist domain data.
 
 ---
 
-### 7. disbursement-service (Ops)
+### 7. disbursement-service
 
 **Owns**
-- Pre- and post-disbursement operations
+- Payment and disbursement operations
 
 **Uses SDKs**
 - bank-sdk
@@ -230,11 +230,8 @@ These services **own business meaning** and persist domain data.
 ### workflow-service
 - Orchestrates long-running flows using the Camunda rule engine
 - Manages retries, compensation, and rule-driven decision enforcement
-- Enforces automated Ops/Risk decisioning; normal flows do not require human Ops/Risk intervention
+- Enforces automated decisioning; all flows are system-driven
 - Owns no business data
-- Orchestrates long-running flows
-- Manages retries and compensation
-- Does not enforce rules
 
 ### audit-service
 - Stores immutable, masked audit logs

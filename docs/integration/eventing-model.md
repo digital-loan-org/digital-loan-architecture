@@ -21,7 +21,7 @@ The database is the single source of truth.
 - Events notify what happened, not what should happen
 - Events are immutable and append-only
 - No event is emitted without a committed database state
-- Replay is engineering-controlled, never Ops-controlled
+- Replay is engineering-controlled only
 
 Events exist to **decouple services**, not to replace domain ownership.
 
@@ -186,7 +186,7 @@ Consumers react to events; they do not coordinate workflows.
 
 - Replay is **engineering-controlled only**
 
-- Ops-triggered replay is explicitly forbidden
+- Manual or automated replay requires explicit approval
 
 - Replay requires:
 

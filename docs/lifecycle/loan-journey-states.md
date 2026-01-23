@@ -122,30 +122,9 @@ INCOME_VERIFIED → SANCTIONED ❌
 
 ---
 
-## 8. Ops & Manual Overrides
+## 8. Retry & Compensation
 
-### Ops Capabilities
-- Move loan between **non-terminal states**
-- Retry failed stages
-- Pause or resume journeys
-
-### Restrictions
-- Ops CANNOT move a loan out of `REJECTED`
-- Ops actions are:
-    - authenticated
-    - authorized
-    - fully audited
-
-Every manual override generates:
-- audit record
-- Kafka event
-- operator metadata
-
----
-
-## 9. Retry & Compensation
-
-- Retries are handled by workflow-service
+- Retries are handled by workflow-service automatically
 - Each retry has:
     - max attempt count
     - backoff policy
@@ -155,11 +134,12 @@ Every manual override generates:
 
 ---
 
-## 10. Why This Design Works
+## 9. Why This Design Works
 
 - Simple mental model
 - Strong audit guarantees
 - Cost-efficient execution
 - Safe re-application handling
 - Supports regulatory scrutiny
+- Fully automated without human intervention
 

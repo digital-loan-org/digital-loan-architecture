@@ -2,7 +2,6 @@ C4Context
     title Digital Loan Origination Platform - System Context
 
     Person(customer, "Customer", "Salaried individual applying for a personal loan")
-    Person(ops, "Ops / Risk Team", "Reviews applications and performs approve / reject actions")
 
     System(loan_platform, "Digital Loan Origination Platform", "End-to-end digital system handling onboarding, verification, eligibility, sanction, and disbursement")
 
@@ -14,7 +13,6 @@ C4Context
     System_Ext(notification_system, "Notification System", "SMS / Email / Push notifications")
 
     Rel(customer, loan_platform, "Applies for loan, checks status")
-    Rel(ops, loan_platform, "Reviews and approves / rejects loans")
 
     Rel(loan_platform, kyc_vendor, "Performs identity verification")
     Rel(loan_platform, bank_vendor, "Fetches salary and bank data")
