@@ -17,16 +17,11 @@ The goal is to:
 
 | Service | Primary Responsibility | Database | SDKs Used |
 |------|-----------------------|----------|-----------|
-| auth-service | Authentication & authorization | Keycloak DB | — |
 | customer-service | Customer profile & identity | PostgreSQL | identity-sdk |
 | loan-application-service | Loan lifecycle & state | MongoDB | workflow-sdk |
-| kyc-service | PAN, Aadhaar, face match | PostgreSQL | identity-sdk |
 | income-service | Salary & employment checks | PostgreSQL | bank-agg-sdk, epfo-sdk |
-| bureau-service | Credit bureau fetch & parsing | PostgreSQL | bureau-sdk |
 | eligibility-service | FOIR/IIR & policy rules | PostgreSQL | config-sdk |
-| offer-service | Loan offer generation | PostgreSQL | config-sdk |
 | sanction-service | Sanction & eSign | PostgreSQL | esign-sdk |
-| payment-service | Penny drop, NACH, disbursement (mock) | PostgreSQL | nach-sdk, payment-sdk |
 | config-service | Dynamic rules & thresholds | PostgreSQL | — |
 | audit-service | Immutable audit trail | Append-only DB | — |
 | workflow-service | Loan journey orchestration | Camunda DB | workflow-sdk |

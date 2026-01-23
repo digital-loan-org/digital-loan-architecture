@@ -143,45 +143,11 @@ Technical details are retained internally for audit and ops use.
 
 ---
 
-## 7. Ops Intervention Model
-
-Ops users have **limited and explicit authority**.
-
-### Allowed Actions
-- APPROVE (force-pass the loan)
-- REJECT (terminate the loan)
-
-### Restrictions
-- Ops cannot partially modify data
-- Ops cannot bypass audit
-- Ops cannot replay events
-
-All ops actions:
-- require authorization
-- are fully audited
-- emit system events
-- are visible internally
-
-Ops decisions override automation but never bypass traceability.
-
----
-
-## 8. Escalation & Visibility
-
-- Failed stages are visible in workflow UI
-- Retry status and next attempt time are tracked
-- Ops can view full failure history before acting
-
-No silent failures are allowed.
-
----
-
-## 9. Why This Strategy Works
+## 7. Why This Strategy Works
 
 - Minimizes false rejections
 - Controls vendor spend
 - Preserves successful work
-- Enables safe human intervention
 - Supports regulatory audits
 
 This failure strategy reflects **real-world digital lending systems** operating
