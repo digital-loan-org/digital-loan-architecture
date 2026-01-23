@@ -30,7 +30,7 @@ serves as the **frozen baseline** for all future implementation work.
 - `eventing-model.md`  
   Generic event schema, transactional outbox, DLQ strategy, and replay rules.
 - `failure-strategy.md`  
-  Retry philosophy, failure classification, and ops intervention model.
+  Retry philosophy, failure classification, and automated recovery model.
 - `security-and-compliance.md`  
   PII handling, encryption strategy, audit model, and regulatory alignment.
 - `config-service.md`  
@@ -64,7 +64,6 @@ to remain stable over time.
 - Income verification
 - Bureau check
 - Disbursement
-- Ops override (approve / reject)
 
 All diagrams are:
 - text-based (Mermaid)

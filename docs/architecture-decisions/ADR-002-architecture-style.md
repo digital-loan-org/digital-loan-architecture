@@ -134,7 +134,7 @@ Event replay is:
 - executed via controlled consumer groups
 - scoped and audited
 
-Ops-triggered or UI-triggered replay is explicitly forbidden to avoid silent
+Manual or UI-triggered replay is explicitly forbidden to avoid silent
 data corruption.
 
 ---

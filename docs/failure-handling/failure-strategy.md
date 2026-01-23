@@ -7,7 +7,7 @@ The strategy is designed to:
 - minimize unnecessary rejections
 - control vendor costs
 - preserve completed work
-- support operational intervention
+- maintain safe execution
 - maintain audit and regulatory safety
 
 Failures are treated as **expected system behavior**, not exceptions.
@@ -20,7 +20,7 @@ Failures are treated as **expected system behavior**, not exceptions.
 - Business failures and technical failures are treated differently
 - Successful stages are never rolled back
 - Rejection is a **business decision**, not a system error
-- Ops intervention is controlled and auditable
+- System recovery is automated and self-healing
 
 ---
 
@@ -139,7 +139,7 @@ Customers see **business-friendly messages only**.
 ### Example
 > “We are unable to proceed with your loan at this time due to eligibility criteria. You may reapply later.”
 
-Technical details are retained internally for audit and ops use.
+Technical details are retained internally for audit and system diagnostics.
 
 ---
 

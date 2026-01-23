@@ -2,12 +2,10 @@ C4Container
     title Digital Loan Origination Platform - Container Diagram
 
     Person(customer, "Customer", "Salaried loan applicant")
-    Person(ops, "Ops / Risk Team", "Operations and risk users")
 
     System_Boundary(loan_boundary, "Digital Loan Origination Platform") {
 
-        Container(api_gateway, "API Gateway", "Spring Cloud Gateway", "Single entry point for client and ops requests")
-        Container(auth_service, "Auth Service", "Keycloak", "Authentication, authorization, role management")
+        Container(api_gateway, "API Gateway", "Spring Cloud Gateway", "Single entry point for customer requests")
         Container(customer_service, "Customer Service", "Spring Boot", "Customer profile, identity linkage, de-duplication")
         Container(loan_service, "Loan Application Service", "Spring Boot", "Loan lifecycle, state machine, orchestration trigger")
         Container(workflow_service, "Workflow Service", "Camunda", "Saga orchestration, retries, timers, compensation")
@@ -17,7 +15,7 @@ C4Container
         Container(eligibility_service, "Eligibility Service", "Spring Boot", "FOIR / IIR evaluation and policy checks")
         Container(offer_service, "Offer Service", "Spring Boot", "Eligible loan offer generation")
         Container(sanction_service, "Sanction Service", "Spring Boot", "Sanction letter generation and eSign initiation")
-        Container(payment_service, "Payment Service", "Spring Boot", "Bank verification, NACH setup, disbursement trigger")
+        Container(disbursement_service, "Disbursement Service", "Spring Boot", "Bank verification, NACH setup, disbursement")
         Container(config_service, "Config Service", "Spring Boot", "Platform configuration, vendor toggles, retry configs")
         Container(audit_service, "Audit Service", "Spring Boot", "Immutable audit trail")
 
@@ -33,9 +31,7 @@ C4Container
     System_Ext(notification_system, "Notification System", "SMS / Email / Push")
 
     Rel(customer, api_gateway, "Uses")
-    Rel(ops, api_gateway, "Uses")
 
-    Rel(api_gateway, auth_service, "Authenticates via")
     Rel(api_gateway, customer_service, "Customer APIs")
     Rel(api_gateway, loan_service, "Loan APIs")
 
@@ -49,7 +45,7 @@ C4Container
     Rel(income_service, bank_vendor, "Fetches bank data")
     Rel(bureau_service, bureau_vendor, "Fetches credit data")
     Rel(sanction_service, esign_vendor, "Initiates eSign")
-    Rel(payment_service, nach_vendor, "Sets up mandate")
+    Rel(disbursement_service, nach_vendor, "Sets up mandate")
 
     Rel(event_bus, audit_service, "Audit events")
     Rel(loan_service, postgres_db, "Persists loan state")

@@ -107,7 +107,7 @@ Reason:
 
 By persisting state **first** and emitting events **after commit**, the platform:
 - guarantees audit correctness
-- ensures analytics and ops rely on authoritative data
+- ensures analytics and services rely on authoritative data
 - avoids complex event replay semantics
 
 Events are treated as **derived facts**, not primary state.
