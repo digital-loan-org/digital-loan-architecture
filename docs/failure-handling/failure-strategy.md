@@ -7,7 +7,7 @@ The strategy is designed to:
 - minimize unnecessary rejections
 - control vendor costs
 - preserve completed work
-- support operational intervention
+- maintain safe execution
 - maintain audit and regulatory safety
 
 Failures are treated as **expected system behavior**, not exceptions.
@@ -20,7 +20,7 @@ Failures are treated as **expected system behavior**, not exceptions.
 - Business failures and technical failures are treated differently
 - Successful stages are never rolled back
 - Rejection is a **business decision**, not a system error
-- Ops intervention is controlled and auditable
+- System recovery is automated and self-healing
 
 ---
 
@@ -139,49 +139,15 @@ Customers see **business-friendly messages only**.
 ### Example
 > “We are unable to proceed with your loan at this time due to eligibility criteria. You may reapply later.”
 
-Technical details are retained internally for audit and ops use.
+Technical details are retained internally for audit and system diagnostics.
 
 ---
 
-## 7. Ops Intervention Model
-
-Ops users have **limited and explicit authority**.
-
-### Allowed Actions
-- APPROVE (force-pass the loan)
-- REJECT (terminate the loan)
-
-### Restrictions
-- Ops cannot partially modify data
-- Ops cannot bypass audit
-- Ops cannot replay events
-
-All ops actions:
-- require authorization
-- are fully audited
-- emit system events
-- are visible internally
-
-Ops decisions override automation but never bypass traceability.
-
----
-
-## 8. Escalation & Visibility
-
-- Failed stages are visible in workflow UI
-- Retry status and next attempt time are tracked
-- Ops can view full failure history before acting
-
-No silent failures are allowed.
-
----
-
-## 9. Why This Strategy Works
+## 7. Why This Strategy Works
 
 - Minimizes false rejections
 - Controls vendor spend
 - Preserves successful work
-- Enables safe human intervention
 - Supports regulatory audits
 
 This failure strategy reflects **real-world digital lending systems** operating

@@ -107,7 +107,7 @@ Configuration changes follow a **controlled approval process**.
 - No direct production edits
 
 ### Execution
-- Ops executes approved changes
+- Approved changes are deployed automatically
 - System enforces scope and versioning
 
 ---

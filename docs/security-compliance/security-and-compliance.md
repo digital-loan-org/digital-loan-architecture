@@ -100,13 +100,14 @@ Customers cannot view:
 
 ---
 
-### 5.2 Ops Access
-Ops users can access:
-- full loan data
-- decrypted PII (via authorized services)
+### 5.2 Application Services Access
+Application services can access:
+- loan application data required for processing
+- encrypted PII during processing
+- decryption keys only at authorized service boundaries
 
-Ops users cannot:
-- modify raw PII
+Services cannot:
+- directly access raw PII without encryption
 - bypass audit logging
 - replay events
 
@@ -130,7 +131,7 @@ Audited actions include:
 - every loan state transition
 - every vendor request and response (masked)
 - every eligibility and policy decision
-- every ops action
+- every system decision and action
 - every configuration change
 
 Audit logs are:
