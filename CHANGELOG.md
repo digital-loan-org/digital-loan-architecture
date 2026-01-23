@@ -113,4 +113,4 @@ Architecture decisions documented here are the **single source of truth** for al
 - **Minor (x.y.0):** Backward-compatible new features or structural improvements.
 - **Patch (x.y.z):** Backward-compatible bug fixes, small optimizations, or hotfixes.
 ---
-[1.0.0]: https://github.com/digital-loan-org/digital-loan-architecture/tags/1.0.0
+[1.0.0]: https://github.com/digital-loan-org/digital-loan-architecture/releases/tag/1.0.0
