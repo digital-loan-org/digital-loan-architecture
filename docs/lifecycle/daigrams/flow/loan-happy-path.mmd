@@ -1,26 +1,30 @@
 flowchart TD
     Start([Loan Application Started])
 
-    Profile[Profile & OTP Completed]
-    KYC[KYC Verified]
-    Income[Income & Employment Verified]
-    Bureau[Bureau Check Passed]
-    Eligibility[Eligibility Calculated]
-    Offer[Loan Offer Generated]
-    Accept[Offer Accepted by Customer]
-    Sanction[Loan Sanctioned & eSign Completed]
-    NACH[NACH Mandate Setup]
-    Disburse[Loan Disbursed]
+    Identity["Identity Service<br/>(OTP/Session)"]
+    Profile["Customer Service<br/>(Profile)"]
+    KYC["KYC Service<br/>(PAN/Aadhaar/Face)"]
+    Income["Income Service<br/>(Salary Verification)"]
+    Credit["Credit Service<br/>(Bureau Check)"]
+    Eligibility["Eligibility Service<br/>(FOIR/IIR)"]
+    Offer["Offer Service<br/>(Generate Offer)"]
+    Accept["Customer Accepts<br/>Offer"]
+    Sanction["Sanction Service<br/>(eSign)"]
+    PayVer["Payment Verification<br/>(Bank Validation)"]
+    Disb["Disbursement Service<br/>(NACH + Transfer)"]
+    Collection["Collection Service<br/>(EMI Schedule)"]
     End([Loan Active])
 
-    Start --> Profile
+    Start --> Identity
+    Identity --> Profile
     Profile --> KYC
     KYC --> Income
-    Income --> Bureau
-    Bureau --> Eligibility
+    Income --> Credit
+    Credit --> Eligibility
     Eligibility --> Offer
     Offer --> Accept
     Accept --> Sanction
-    Sanction --> NACH
-    NACH --> Disburse
-    Disburse --> End
+    Sanction --> PayVer
+    PayVer --> Disb
+    Disb --> Collection
+    Collection --> End

@@ -2,14 +2,20 @@ sequenceDiagram
     participant Customer
     participant API as API Gateway
     participant Loan as Loan Application Service
+    participant Outbox as Transactional Outbox
     participant DB as Loan DB
+    participant Kafka as Event Bus (Kafka)
     participant WF as Workflow Service (Camunda)
 
     Customer->>API: Submit loan application
-    API->>Loan: Create loan application
-    Loan->>DB: Persist loan (CREATED)
-    DB-->>Loan: Commit success
-    Loan->>WF: Start loan workflow
-    WF-->>Loan: Workflow instance started
+    API->>Loan: Create loan application (REST)
+    Loan->>DB: Begin transaction
+    Loan->>DB: Persist loan state (CREATED)
+    Loan->>Outbox: Write APPLICATION_CREATED event to outbox
+    DB-->>Loan: Commit transaction (state + event)
+    Loan->>Kafka: Publish APPLICATION_CREATED event
+    Kafka-->>WF: Event consumed
+    Kafka-->>API: Event captured (async)
+    WF-->>WF: Start loan workflow (BPMN)
     Loan-->>API: Loan application ID returned
-    API-->>Customer: Application created
+    API-->>Customer: {applicationId, status: CREATED}

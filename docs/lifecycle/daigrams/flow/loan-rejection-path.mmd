@@ -1,35 +1,35 @@
 flowchart TD
     Start([Loan Application Started])
 
-    Profile[Profile & OTP Completed]
-    KYC[KYC Verification]
-    Income[Income & Employment Check]
-    Bureau[Bureau Check]
-    Eligibility[Eligibility Evaluation]
+    Profile["Customer Service<br/>(Profile Completed)"]
+    KYC["KYC Service<br/>(Verification)"]
+    Income["Income Service<br/>(Employment Check)"]
+    Credit["Credit Service<br/>(Bureau Check)"]
+    Eligibility["Eligibility Service<br/>(FOIR/IIR Evaluation)"]
 
-    RejectKYC([Loan Rejected])
-    RejectIncome([Loan Rejected])
-    RejectBureau([Loan Rejected])
-    RejectEligibility([Loan Rejected])
+    RejectKYC(["❌ Loan Rejected<br/>(KYC Failed)"])
+    RejectIncome(["❌ Loan Rejected<br/>(Salary Below Min)"])
+    RejectCredit(["❌ Loan Rejected<br/>(Credit Score Low)"])
+    RejectElig(["❌ Loan Rejected<br/>(Eligibility Failed)"])
 
-    End([Loan Application Closed])
+    End(["Loan Application<br/>Closed (REJECTED)"])
 
     Start --> Profile
     Profile --> KYC
 
-    KYC -->|Failed| RejectKYC
-    KYC -->|Passed| Income
+    KYC -->|✅ Verified| Income
+    KYC -->|❌ Failed| RejectKYC
 
-    Income -->|Failed| RejectIncome
-    Income -->|Passed| Bureau
+    Income -->|✅ Verified| Credit
+    Income -->|❌ Failed| RejectIncome
 
-    Bureau -->|Failed| RejectBureau
-    Bureau -->|Passed| Eligibility
+    Credit -->|✅ Verified| Eligibility
+    Credit -->|❌ Failed| RejectCredit
 
-    Eligibility -->|Failed| RejectEligibility
-    Eligibility -->|Passed| End
+    Eligibility -->|✅ Eligible| End
+    Eligibility -->|❌ Ineligible| RejectElig
 
     RejectKYC --> End
     RejectIncome --> End
-    RejectBureau --> End
-    RejectEligibility --> End
+    RejectCredit --> End
+    RejectElig --> End
