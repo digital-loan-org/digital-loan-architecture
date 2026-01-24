@@ -1,4 +1,4 @@
-# API Contracts & Error Catalog
+# Error Catalog
 
 **Effective Date:** January 24, 2026  
 **Status:** FINAL - Architecture Review

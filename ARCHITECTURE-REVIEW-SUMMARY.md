@@ -26,7 +26,7 @@
 
 ### NEW DOCUMENTS CREATED ✅
 1. **[ARCHITECTURE-REVIEW-DECISIONS.md](ARCHITECTURE-REVIEW-DECISIONS.md)** – Complete 10-issue analysis + solutions
-2. **[SERVICE-RESPONSIBILITY-MATRIX.md](SERVICE-RESPONSIBILITY-MATRIX.md)** – Authoritative service matrix + rules
+2. **[SERVICE-RESPONSIBILITY-MATRIX.md](docs/SERVICE-RESPONSIBILITY-MATRIX.md)** – Authoritative service matrix + rules
 
 ### UPDATED DOCUMENTS ✅
 1. **service-landscape.md** – Added new/clarified services
