@@ -1,18 +1,37 @@
 sequenceDiagram
     participant WF as Workflow Service
-    participant Pay as Payment Service
-    participant NACH as NACH Provider
-    participant Bank as Bank System (Mocked)
-    participant DB as Payment DB
-    participant Kafka as Event Bus
+    participant PayVer as Payment Verification Service
+    participant Bank as Bank SDK
+    participant Disb as Disbursement Service
+    participant NACH as NACH SDK
+    participant PaySDK as Payment SDK
+    participant DB as Disbursement DB
+    participant Outbox as Transactional Outbox
+    participant Kafka as Event Bus (Kafka)
 
-    WF->>Pay: Initiate disbursement
-    Pay->>NACH: Verify NACH mandate
-    NACH-->>Pay: Mandate confirmed
-    Pay->>Bank: Transfer funds (mocked)
-    Bank-->>Pay: Transfer success
-    Pay->>DB: Persist disbursement status
-    DB-->>Pay: Commit success
-    Pay->>Kafka: Publish LOAN_DISBURSED
+    WF->>PayVer: Validate bank account
+    PayVer->>Bank: Verify IFSC & account number
+    Bank-->>PayVer: Account valid
+    PayVer->>Kafka: Publish PAYMENT_ACCOUNT_VERIFIED
+    
+    WF->>Disb: Initiate disbursement
+    Disb->>NACH: Create NACH mandate
+    NACH-->>Disb: Mandate initiated
+    
+    Disb->>DB: Persist NACH status
+    Disb->>Outbox: Write DISBURSEMENT_NACH_INITIATED event
+    DB-->>Disb: Commit
+    Disb->>Kafka: Publish DISBURSEMENT_NACH_INITIATED
+    
+    WF-->>WF: Wait for NACH confirmation
+    
+    WF->>Disb: Execute fund transfer
+    Disb->>PaySDK: Transfer funds (mocked)
+    PaySDK-->>Disb: Transfer success
+    
+    Disb->>DB: Persist disbursement status (DISBURSED)
+    Disb->>Outbox: Write DISBURSEMENT_COMPLETED event
+    DB-->>Disb: Commit
+    Disb->>Kafka: Publish DISBURSEMENT_COMPLETED
     Kafka-->>WF: Event consumed
     WF-->>WF: Mark loan DISBURSED

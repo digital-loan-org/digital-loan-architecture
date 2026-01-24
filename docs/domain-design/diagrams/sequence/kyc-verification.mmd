@@ -1,0 +1,24 @@
+sequenceDiagram
+    participant WF as Workflow Service
+    participant KYC as KYC Service
+    participant KYCVendor as KYC Vendor SDK
+    participant DB as KYC DB
+    participant Outbox as Transactional Outbox
+    participant Kafka as Event Bus (Kafka)
+
+    WF->>KYC: Initiate KYC verification
+    KYC->>KYCVendor: Start PAN verification
+    KYCVendor-->>KYC: PAN verified
+    KYC->>KYCVendor: Request Aadhaar verification
+    KYCVendor-->>KYC: Aadhaar verified (live, in-memory only)
+    KYC->>KYCVendor: Request face match/liveness
+    KYCVendor-->>KYC: Face match successful (image discarded)
+    
+    Note over KYC: Store ONLY KYC status, not Aadhaar or face image
+    
+    KYC->>DB: Persist KYC verification result
+    KYC->>Outbox: Write KYC_VERIFIED event to outbox
+    DB-->>KYC: Commit transaction (state + event)
+    KYC->>Kafka: Publish KYC_VERIFIED event
+    Kafka-->>WF: Event consumed
+    WF-->>WF: Proceed to income verification
