@@ -1,15 +1,17 @@
 sequenceDiagram
     participant WF as Workflow Service
-    participant Bureau as Bureau Service
-    participant Vendor as Credit Bureau
-    participant DB as Bureau DB
-    participant Kafka as Event Bus
+    participant Credit as Credit Service
+    participant Bureau as Bureau SDK
+    participant DB as Credit DB
+    participant Outbox as Transactional Outbox
+    participant Kafka as Event Bus (Kafka)
 
-    WF->>Bureau: Perform bureau check
-    Bureau->>Vendor: Fetch credit report
-    Vendor-->>Bureau: Credit score & tradelines
-    Bureau->>DB: Persist bureau result
-    DB-->>Bureau: Commit success
-    Bureau->>Kafka: Publish BUREAU_CHECKED
+    WF->>Credit: Perform credit/bureau check
+    Credit->>Bureau: Fetch credit report from CRIF Highmark
+    Bureau-->>Credit: Credit score, DPD, vintage, adverse flags
+    Credit->>DB: Persist parsed bureau result
+    Credit->>Outbox: Write event to outbox (same transaction)
+    DB-->>Credit: Commit success
+    Credit->>Kafka: Publish CREDIT_VERIFIED event
     Kafka-->>WF: Event consumed
-    WF-->>WF: Proceed to eligibility
+    WF-->>WF: Proceed to eligibility evaluation

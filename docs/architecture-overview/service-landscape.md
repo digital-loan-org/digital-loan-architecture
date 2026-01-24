@@ -11,34 +11,54 @@ The goal is to:
 
 ---
 
-## 1. High-Level Service & SDK Matrix
+## 1. High-Level Service & SDK Matrix (FINAL - Post Review)
 
-### Core Services
+### Core Platform Services
 
-| Service | Primary Responsibility | Database | SDKs Used |
-|------|-----------------------|----------|-----------|
-| customer-service | Customer profile & identity | PostgreSQL | kyc-sdk |
-| application-service | Loan lifecycle & state | PostgreSQL | None |
-| income-service | Salary & employment checks | PostgreSQL | bank-sdk, epfo-sdk |
-| eligibility-service | FOIR/IIR & policy rules | PostgreSQL | None |
-| sanction-service | Sanction & eSign | PostgreSQL | esign-sdk |
-| config-service | Dynamic rules & thresholds | PostgreSQL | — |
-| audit-service | Immutable audit trail | Append-only DB | — |
-| workflow-service | Loan journey orchestration | Camunda DB | None |
+| Service | Primary Responsibility | Database | SDKs Used | Status |
+|------|-----------------------|----------|-----------|--------|
+| identity-service | OTP/auth/session management | Redis/PostgreSQL | sms-sdk, email-sdk, messaging-sdk | CLARIFIED |
+| customer-service | Customer profile only | PostgreSQL | messaging-sdk | SPLIT |
+| kyc-service | KYC verification workflow | PostgreSQL | kyc-sdk, messaging-sdk | **NEW** |
+| application-service | Loan application state | PostgreSQL | messaging-sdk | KEPT |
+| income-service | Income & employment verification | PostgreSQL | bank-sdk, epfo-sdk, messaging-sdk | KEPT |
+| credit-service | Bureau & credit scoring | PostgreSQL | bureau-sdk, messaging-sdk | CLARIFIED |
+| eligibility-service | FOIR/IIR computation | PostgreSQL | messaging-sdk | KEPT |
+| offer-service | Offer generation | PostgreSQL | messaging-sdk | **ADDED** |
+| sanction-service | Sanction & eSign | PostgreSQL + S3 | esign-sdk, messaging-sdk | KEPT |
+| payment-verification-service | Bank account validation | PostgreSQL | bank-sdk, messaging-sdk | **NEW** |
+| disbursement-service | NACH & fund transfer | PostgreSQL | nach-sdk, payment-sdk, messaging-sdk | SIMPLIFIED |
+| collection-service | Post-disbursal loan lifecycle | PostgreSQL | payment-sdk, messaging-sdk | DOCUMENTED |
+| notification-service | Customer communication | PostgreSQL (optional) | sms-sdk, email-sdk, messaging-sdk | KEPT |
+| workflow-service | Loan orchestration (Camunda) | Camunda DB | messaging-sdk | KEPT |
+| config-service | Platform configuration | PostgreSQL/Redis | messaging-sdk | KEPT |
+| audit-service | Immutable audit trail | Append-only DB | messaging-sdk | KEPT |
+
+---
+
+### Common SDKs (Must be used by all domain services)
+
+| SDK | Purpose | Key Feature |
+|----|---------|-------------|
+| messaging-sdk | Transactional Outbox + Kafka publishing | Event emission with consistency guarantee |
+| vendor-observability-sdk | Tracing & PII masking | Request-level observability |
+| idempotency-sdk | Request deduplication | Prevents duplicate processing |
 
 ---
 
 ### Vendor SDKs (Vendor-Agnostic Interfaces)
 
-| SDK | Abstracts | Typical Vendors |
-|----|----------|---------------|
-| kyc-sdk | PAN, Aadhaar, face match | ULI, Karza |
-| bank-sdk | Bank statements & salary | ULI, Ignosis |
-| epfo-sdk | EPFO employment verification | EPFO / ULI |
-| bureau-sdk | Credit bureau data | CRIF Highmark |
-| esign-sdk | Digital document signing | ULI, SignDesk |
-| nach-sdk | e-NACH mandate | CAMS, Razorpay |
-| payment-sdk | Disbursement rails (mocked) | Bank APIs |
+| SDK | Abstracts | Typical Vendors | Used By |
+|----|----------|---------------|---------|
+| kyc-sdk | PAN, Aadhaar, face match | ULI, Karza, etc. | kyc-service |
+| bank-sdk | Bank statements & salary verification | ULI, Ignosis, etc. | income-service, payment-verification-service |
+| epfo-sdk | EPFO employment verification | EPFO / ULI | income-service |
+| bureau-sdk | Credit bureau data & scoring | CRIF Highmark, etc. | credit-service |
+| esign-sdk | Digital document signing | ULI, SignDesk, etc. | sanction-service |
+| nach-sdk | e-NACH mandate creation | CAMS, Razorpay, etc. | disbursement-service |
+| payment-sdk | Payment & disbursement (mocked) | Bank APIs (mocked) | disbursement-service, collection-service |
+| sms-sdk | SMS delivery | Vendor SMS gateway | notification-service, identity-service |
+| email-sdk | Email delivery | Vendor email service | notification-service, identity-service |
 
 ---
 

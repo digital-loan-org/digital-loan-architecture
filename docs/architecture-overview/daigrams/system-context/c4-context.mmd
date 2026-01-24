@@ -1,22 +1,24 @@
 C4Context
-    title Digital Loan Origination Platform - System Context
+    title Digital Loan Origination Platform - System Context (FINAL)
 
     Person(customer, "Customer", "Salaried individual applying for a personal loan")
 
-    System(loan_platform, "Digital Loan Origination Platform", "End-to-end digital system handling onboarding, verification, eligibility, sanction, and disbursement")
+    System(loan_platform, "Digital Loan Origination Platform", "End-to-end digital system: onboarding, KYC, income, credit, eligibility, sanction, bank verification, disbursement, collection")
 
-    System_Ext(kyc_vendor, "KYC & Identity Vendor", "PAN, Aadhaar, face match, liveliness verification")
-    System_Ext(bank_vendor, "Bank Aggregator", "Salary verification and bank statement analysis")
-    System_Ext(bureau_vendor, "Credit Bureau", "Credit score, DPD and vintage checks")
-    System_Ext(esign_vendor, "eSign Provider", "Digital signing of sanction documents")
-    System_Ext(nach_vendor, "NACH Provider", "EMI mandate setup")
+    System_Ext(kyc_vendor, "KYC & Identity Vendor", "PAN, Aadhaar, face match, liveness verification (ULI, Karza)")
+    System_Ext(bank_vendor, "Bank Aggregator", "Salary verification, bank statement analysis (ULI, Ignosis)")
+    System_Ext(bureau_vendor, "Credit Bureau", "Credit score, DPD, vintage checks (CRIF Highmark)")
+    System_Ext(esign_vendor, "eSign Provider", "Digital signing of sanction documents (ULI, SignDesk)")
+    System_Ext(nach_vendor, "NACH Provider", "EMI mandate setup (CAMS, Razorpay)")
+    System_Ext(epfo_vendor, "EPFO Vendor", "Employment verification via EPFO")
     System_Ext(notification_system, "Notification System", "SMS / Email / Push notifications")
 
-    Rel(customer, loan_platform, "Applies for loan, checks status")
+    Rel(customer, loan_platform, "Applies for loan, checks status, accepts offer")
 
     Rel(loan_platform, kyc_vendor, "Performs identity verification")
     Rel(loan_platform, bank_vendor, "Fetches salary and bank data")
-    Rel(loan_platform, bureau_vendor, "Fetches credit report")
-    Rel(loan_platform, esign_vendor, "Initiates e-signing")
+    Rel(loan_platform, bureau_vendor, "Fetches credit report and score")
+    Rel(loan_platform, esign_vendor, "Initiates e-signing for sanction")
     Rel(loan_platform, nach_vendor, "Sets up NACH mandate")
-    Rel(loan_platform, notification_system, "Sends notifications")
+    Rel(loan_platform, epfo_vendor, "Verifies employment")
+    Rel(loan_platform, notification_system, "Sends SMS/Email/Push")

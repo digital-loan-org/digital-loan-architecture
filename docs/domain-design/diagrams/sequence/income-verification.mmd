@@ -1,15 +1,20 @@
 sequenceDiagram
     participant WF as Workflow Service
     participant Income as Income Service
-    participant Bank as Bank Aggregator
+    participant Bank as Bank Aggregator SDK
+    participant EPFO as EPFO Verification SDK
     participant DB as Income DB
-    participant Kafka as Event Bus
+    participant Outbox as Transactional Outbox
+    participant Kafka as Event Bus (Kafka)
 
-    WF->>Income: Verify income
-    Income->>Bank: Fetch bank statements
+    WF->>Income: Trigger income verification
+    Income->>Bank: Fetch bank statements & salary
     Bank-->>Income: Salary data
+    Income->>EPFO: Verify employment
+    EPFO-->>Income: Employment status
     Income->>DB: Persist income verification result
+    Income->>Outbox: Write event to outbox (same transaction)
     DB-->>Income: Commit success
-    Income->>Kafka: Publish INCOME_VERIFIED
+    Income->>Kafka: Publish INCOME_VERIFIED event
     Kafka-->>WF: Event consumed
-    WF-->>WF: Move to next stage
+    WF-->>WF: Proceed to credit check
