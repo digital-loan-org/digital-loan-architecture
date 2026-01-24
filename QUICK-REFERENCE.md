@@ -379,7 +379,7 @@ Used for: Rate-limit errors, quota exhausted
 |----------|----------|
 | "Why this architecture?" | [ADR-001](docs/architecture-decisions/ADR-001-architecture-style.md) |
 | "What does this service do?" | [SERVICE-RESPONSIBILITY-MATRIX](docs/SERVICE-RESPONSIBILITY-MATRIX.md) |
-| "How do I handle this error?" | [ERROR-CATALOG](docs/api-contracts/ERROR-CATALOG.md) |
+| "How do I handle this error?" | [ERROR-CATALOG](docs/ERROR-CATALOG.md) |
 | "What events exist?" | [kafka-event-catalog](docs/integration/kafka-event-catalog.md) |
 | "Data security rules?" | [security-compliance](docs/security-compliance/security-and-compliance.md) |
 | "State machine?" | [loan-journey-states](docs/lifecycle/loan-journey-states.md) |

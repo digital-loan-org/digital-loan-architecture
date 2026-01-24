@@ -82,7 +82,7 @@
 
 | Document | Purpose | Audience |
 |----------|---------|----------|
-| [api-contracts/ERROR-CATALOG.md](docs/api-contracts/ERROR-CATALOG.md) | **NEW**: Error codes, retry logic, customer messages | Engineering |
+| [api-contracts/ERROR-CATALOG.md](docs/ERROR-CATALOG.md) | **NEW**: Error codes, retry logic, customer messages | Engineering |
 
 ---
 
@@ -229,12 +229,12 @@ These are enforced at multiple levels (code review, architecture, design):
 ### Data Flow
 - Application Created → [loan-journey-states.md](docs/lifecycle/loan-journey-states.md)
 - Events Emitted → [eventing-model.md](docs/integration/eventing-model.md)
-- Errors Handled → [ERROR-CATALOG.md](docs/api-contracts/ERROR-CATALOG.md)
+- Errors Handled → [ERROR-CATALOG.md](docs/ERROR-CATALOG.md)
 - Failures Managed → [failure-strategy.md](docs/failure-handling/failure-strategy.md)
 
 ### Service Interactions
 - Service X wants to call Service Y → [SERVICE-RESPONSIBILITY-MATRIX.md](docs/SERVICE-RESPONSIBILITY-MATRIX.md) Section III
-- Error handling → [ERROR-CATALOG.md](docs/api-contracts/ERROR-CATALOG.md)
+- Error handling → [ERROR-CATALOG.md](docs/ERROR-CATALOG.md)
 - Event schema → [kafka-event-catalog.md](docs/integration/kafka-event-catalog.md)
 
 ### Compliance
